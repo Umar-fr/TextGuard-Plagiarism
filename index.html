@@ -3,252 +3,1016 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>TextGuard - Premium Plagiarism Checker</title>
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+  <title>TextGuard - Plagiarism Checker & Remover</title>
   <style>
-    :root{--bg-1:#0f172a;--bg-2:#1e293b;--accent-1:#3b82f6;--accent-2:#06b6d4;--muted:#94a3b8;--card-bg:rgba(255,255,255,0.98);--text-dark:#0f172a;--radius:12px;--shadow-sm:0 6px 24px rgba(0,0,0,0.12);--max-width:1400px}
-    *{box-sizing:border-box;margin:0;padding:0}html,body{height:100%}
-    body{font-family:Inter,system-ui,Segoe UI,Arial;background:linear-gradient(135deg,var(--bg-1) 0%,var(--bg-2) 50%,#0f4c75 100%);color:var(--text-dark);min-height:100vh;display:flex;flex-direction:column}
-    nav{position:sticky;top:0;background:rgba(15,23,42,0.9);backdrop-filter:blur(8px);border-bottom:1px solid rgba(59,130,246,0.08);z-index:120}
-    .nav-inner{max-width:var(--max-width);margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:.75rem 1rem}
-    .brand{display:flex;align-items:center;gap:.6rem;color:#cbd5e1;font-weight:700}
-    .nav-links{display:flex;gap:.5rem}
-    .nav-links a{color:#cbd5e1;padding:.5rem .9rem;border-radius:8px;text-decoration:none;font-weight:600}
-    .nav-links a.active{background:linear-gradient(90deg,var(--accent-1),var(--accent-2));color:#fff}
-    .header{text-align:center;padding:1rem;color:#fff;background:linear-gradient(180deg,rgba(59,130,246,0.06),transparent)}
-    .header h1{font-size:clamp(1.4rem,4vw,2rem);margin-bottom:.25rem;background:linear-gradient(135deg,var(--accent-1),var(--accent-2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-    .container{max-width:var(--max-width);margin:1.5rem auto;padding:0 1rem;display:grid;grid-template-columns:1fr minmax(260px,360px);gap:2rem}
-    .left-section{display:flex;flex-direction:column;gap:1.25rem}
-    textarea{width:100%;min-height:300px;padding:1.25rem;border-radius:var(--radius);border:2px solid rgba(59,130,246,0.14);background:var(--card-bg);font-family:inherit}
-    .button-group{display:flex;gap:.85rem}
-    .btn-check{background:linear-gradient(135deg,var(--accent-1),var(--accent-2));color:#fff;padding:.8rem 1rem;border-radius:10px;border:0;cursor:pointer;font-weight:700}
-    .btn-clear{background:rgba(255,255,255,0.08);color:#fff;padding:.8rem 1rem;border-radius:10px;border:1px solid rgba(255,255,255,0.12);cursor:pointer}
-    .card{background:linear-gradient(180deg,rgba(255,255,255,0.98),#f8fafc);padding:1.15rem;border-radius:12px;box-shadow:var(--shadow-sm);border:1px solid rgba(59,130,246,0.08)}
-    .file-list{max-height:320px;overflow:auto;margin-top:.6rem}
-    .file-item{display:flex;justify-content:space-between;align-items:center;background:linear-gradient(135deg,#f0f9ff,#e0f2fe);padding:.6rem;border-radius:8px;margin-bottom:.5rem;font-size:.9rem;color:#0f4c75;border-left:4px solid var(--accent-1)}
-    .file-item .left{display:flex;align-items:center;gap:.5rem}
-    .file-item .actions{display:flex;gap:.5rem;align-items:center}
-    .file-item button{padding:.35rem .6rem;border-radius:6px;border:0;font-weight:700;cursor:pointer}
-    .btn-index{background:linear-gradient(135deg,#06b6d4,#3b82f6);color:#fff}
-    .btn-analyze{background:linear-gradient(135deg,#3b82f6,#06b6d4);color:#fff}
-    .btn-remove{background:linear-gradient(135deg,#ef4444,#dc2626);color:#fff}
-    .status-badge{font-size:.8rem;padding:.15rem .5rem;border-radius:8px;background:rgba(0,0,0,0.04)}
-    .error-badge{background:#ffebee;color:#b91c1c;padding:.15rem .45rem;border-radius:6px;font-size:.75rem;margin-left:.5rem}
-    .muted-note{font-size:.85rem;color:#64748b;margin-top:.5rem}
-    .results-card{display:none;margin-top:.75rem}
-    .results-card.show{display:block}
-    .result-item{padding:.9rem;background:linear-gradient(135deg,#f0f9ff,#e0f2fe);border-left:4px solid var(--accent-1);border-radius:8px;margin-bottom:.8rem;color:#0f4c75}
-    @media(max-width:1024px){.container{grid-template-columns:1fr;padding:0 1rem}}
+    :root {
+      --bg-1: #0f172a;
+      --bg-2: #1e293b;
+      --bg-3: #334155;
+      --accent-1: #3b82f6;
+      --accent-2: #06b6d4;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --error: #ef4444;
+    }
+    
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body {
+      font-family: 'Inter', system-ui, 'Segoe UI', Arial, sans-serif;
+      background: linear-gradient(135deg, var(--bg-1), var(--bg-2));
+      color: #fff;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    
+    .header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    
+    .header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+      background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .header p {
+      color: #cbd5e1;
+      font-size: 1rem;
+    }
+    
+    .tabs {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 2rem;
+      border-bottom: 2px solid var(--bg-3);
+    }
+    
+    .tab-btn {
+      padding: 0.75rem 1.5rem;
+      border: none;
+      background: none;
+      color: #cbd5e1;
+      cursor: pointer;
+      font-size: 1rem;
+      border-bottom: 3px solid transparent;
+      transition: all 0.3s;
+    }
+    
+    .tab-btn.active {
+      color: var(--accent-1);
+      border-bottom-color: var(--accent-1);
+    }
+    
+    .tab-content {
+      display: none;
+    }
+    
+    .tab-content.active {
+      display: block;
+    }
+    
+    .card {
+      background: rgba(255, 255, 255, 0.95);
+      color: #0f172a;
+      padding: 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+      margin-bottom: 1.5rem;
+    }
+    
+    .card h3 {
+      margin-bottom: 1rem;
+      color: var(--accent-1);
+    }
+    
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 360px;
+      gap: 1.5rem;
+    }
+    
+    @media (max-width: 1024px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .form-group {
+      margin-bottom: 1rem;
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      color: #1e293b;
+    }
+    
+    textarea {
+      width: 100%;
+      min-height: 250px;
+      padding: 1rem;
+      border: 2px solid #e2e8f0;
+      border-radius: 8px;
+      font-family: 'Courier New', monospace;
+      font-size: 0.95rem;
+      resize: vertical;
+      transition: border-color 0.3s;
+    }
+    
+    textarea:focus {
+      outline: none;
+      border-color: var(--accent-1);
+    }
+    
+    input[type="text"],
+    input[type="number"],
+    input[type="file"],
+    select {
+      width: 100%;
+      padding: 0.6rem;
+      border: 2px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      transition: border-color 0.3s;
+    }
+    
+    input[type="text"]:focus,
+    input[type="number"]:focus,
+    select:focus {
+      outline: none;
+      border-color: var(--accent-1);
+    }
+    
+    input[type="range"] {
+      width: 100%;
+      cursor: pointer;
+    }
+    
+    .btn {
+      padding: 0.7rem 1.5rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 600;
+      transition: all 0.3s;
+      display: inline-block;
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+      color: #fff;
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(59, 130, 246, 0.3);
+    }
+    
+    .btn-secondary {
+      background: #e2e8f0;
+      color: #0f172a;
+    }
+    
+    .btn-secondary:hover {
+      background: #cbd5e1;
+    }
+    
+    .btn-group {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-top: 1rem;
+    }
+    
+    .btn-small {
+      padding: 0.4rem 0.8rem;
+      font-size: 0.9rem;
+    }
+    
+    .stats {
+      background: #f1f5f9;
+      padding: 1rem;
+      border-radius: 8px;
+      margin: 1rem 0;
+    }
+    
+    .stat-item {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.5rem;
+      color: #0f172a;
+    }
+    
+    .stat-label {
+      font-weight: 600;
+    }
+    
+    .stat-value {
+      color: var(--accent-1);
+    }
+    
+    .plagiarism-bar {
+      width: 100%;
+      height: 25px;
+      background: #e2e8f0;
+      border-radius: 4px;
+      overflow: hidden;
+      margin: 0.5rem 0;
+    }
+    
+    .plagiarism-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--success), var(--warning), var(--error));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-weight: bold;
+      font-size: 0.85rem;
+      transition: width 0.3s;
+    }
+    
+    .match-item {
+      background: #f1f5f9;
+      padding: 0.75rem;
+      border-radius: 6px;
+      margin-bottom: 0.5rem;
+      border-left: 4px solid var(--accent-1);
+    }
+    
+    .match-url {
+      color: var(--accent-1);
+      text-decoration: none;
+      word-break: break-all;
+      font-size: 0.9rem;
+    }
+    
+    .match-url:hover {
+      text-decoration: underline;
+    }
+    
+    .match-score {
+      color: #64748b;
+      font-size: 0.85rem;
+      margin-top: 0.25rem;
+    }
+    
+    .loading {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid #e2e8f0;
+      border-top-color: var(--accent-1);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-left: 0.5rem;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    .alert {
+      padding: 1rem;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+    }
+    
+    .alert-success {
+      background: #dcfce7;
+      color: #166534;
+      border: 1px solid #86efac;
+    }
+    
+    .alert-error {
+      background: #fee2e2;
+      color: #991b1b;
+      border: 1px solid #fca5a5;
+    }
+    
+    .alert-info {
+      background: #dbeafe;
+      color: #1e40af;
+      border: 1px solid #93c5fd;
+    }
+    
+    .no-data {
+      text-align: center;
+      color: #94a3b8;
+      padding: 2rem;
+    }
+    
+    .intensity-display {
+      text-align: center;
+      margin-top: 0.5rem;
+      color: var(--accent-1);
+      font-weight: bold;
+    }
+    
+    .comparison-split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    
+    @media (max-width: 768px) {
+      .comparison-split {
+        grid-template-columns: 1fr;
+      }
+      .header h1 {
+        font-size: 1.8rem;
+      }
+    }
+    
+    .text-preview {
+      background: #f1f5f9;
+      padding: 1rem;
+      border-radius: 8px;
+      max-height: 300px;
+      overflow-y: auto;
+      color: #0f172a;
+      white-space: pre-wrap;
+      word-break: break-word;
+      font-size: 0.9rem;
+      border: 1px solid #cbd5e1;
+    }
+    
+    mark {
+      background: #fef08a;
+      color: #000;
+      padding: 2px 4px;
+      border-radius: 2px;
+    }
   </style>
 </head>
 <body>
-  <div class="header"><h1>✨ TextGuard Pro</h1><p style="color:#cbd5e1">Advanced Content Analysis & Verification Platform</p></div>
-
-  <nav aria-label="Main nav">
-    <div class="nav-inner">
-      <div class="brand">🛡️ TextGuard</div>
-      <div class="nav-links" id="primaryNav">
-        <a href="#" class="nav-link active" data-section="plagiarism">📋 Plagiarism Checker</a>
-        <a href="#" class="nav-link" data-section="ai-detector">🤖 AI Detector</a>
-        <a href="#" class="nav-link" data-section="ai-humanizer">✨ Humanizer</a>
+  <div class="container">
+    <div class="header">
+      <h1>🔍 TextGuard</h1>
+      <p>Advanced Plagiarism Checker & Remover with Web Crawling</p>
+    </div>
+    
+    <!-- Tab Navigation -->
+    <div class="tabs">
+      <button type="button" class="tab-btn active" data-tab="checker">Plagiarism Checker</button>
+      <button type="button" class="tab-btn" data-tab="remover">Plagiarism Remover</button>
+    </div>
+    
+    <!-- Plagiarism Checker Tab -->
+    <div class="tab-content active" id="checker">
+      <div class="grid">
+        <div>
+          <!-- Input Section -->
+          <div class="card">
+            <h3>📝 Check Your Content</h3>
+            
+            <div class="form-group">
+              <label for="textInput">Paste your text or upload a file</label>
+              <textarea id="textInput" placeholder="Paste your text here..."></textarea>
+            </div>
+            
+            <div class="form-group">
+              <label for="userId">User ID (optional)</label>
+              <input id="userId" type="text" placeholder="Enter user ID for tracking">
+            </div>
+            
+            <div class="form-group">
+              <label for="maxPhrases">Search Phrases (3-20)</label>
+              <input id="maxPhrases" type="number" min="3" max="20" value="10">
+            </div>
+            
+            <div class="form-group">
+              <label for="maxUrls">Max URLs to Check (10-60)</label>
+              <input id="maxUrls" type="number" min="10" max="60" value="30">
+            </div>
+            
+            <div class="form-group">
+              <label>
+                <input type="checkbox" id="useSemantic" checked> Use Semantic Analysis
+              </label>
+            </div>
+            
+            <div class="btn-group">
+              <button id="analyzeBtn" type="button" class="btn btn-primary">Analyze Text</button>
+              <button id="uploadBtn" type="button" class="btn btn-secondary">Upload File</button>
+              <button id="clearBtn" type="button" class="btn btn-secondary btn-small">Clear</button>
+            </div>
+            
+            <input id="fileInput" type="file" accept=".txt,.pdf,.docx,.csv" style="display:none">
+          </div>
+          
+          <!-- Results Section -->
+          <div id="resultsArea"></div>
+        </div>
+        
+        <!-- Sidebar -->
+        <aside>
+          <div class="card">
+            <h3>📊 Matches</h3>
+            <div id="matchesList" class="no-data">No results yet</div>
+          </div>
+          
+          <div class="card">
+            <h3>ℹ️ Statistics</h3>
+            <div id="statsInfo" class="no-data">Run analysis to see stats</div>
+          </div>
+        </aside>
       </div>
     </div>
-  </nav>
-
-  <main class="container">
-    <!-- left -->
-    <section id="plagiarism" class="left-section">
-      <h2 style="color:#fff">📝 Paste Your Content</h2>
-      <textarea id="textInput" placeholder="Paste your text here for instant plagiarism detection..."></textarea>
-      <div class="button-group">
-        <button class="btn-check" id="analyzeBtn">🔍 Analyze</button>
-        <button class="btn-clear" id="clearBtn">↻ Clear</button>
-      </div>
-
-      <div id="resultsCard" class="results-card card" aria-live="polite">
-        <div style="font-weight:700;color:#0f172a;margin-bottom:.6rem">📊 Analysis Results</div>
-        <div id="resultsContent"></div>
-      </div>
-    </section>
-
-    <!-- right -->
-    <aside class="card" style="display:flex;flex-direction:column;gap:1rem">
-      <div>
-        <div style="font-weight:700;color:#0f172a;margin-bottom:.6rem">📤 Upload Document</div>
+    
+    <!-- Plagiarism Remover Tab -->
+    <div class="tab-content" id="remover">
+      <div class="grid">
         <div>
-          <input id="fileInput" type="file" accept=".txt,.pdf,.doc,.docx" multiple style="display:none">
-          <label for="fileInput" style="display:inline-block;padding:.9rem;border-radius:10px;background:linear-gradient(135deg,#3b82f6,#06b6d4);color:#fff;cursor:pointer;font-weight:800">Choose File(s)</label>
-          <div id="fileList" class="file-list"></div>
-          <div class="muted-note">Files are only shown on upload. Click <strong>Index</strong> to add to corpus, or <strong>Analyze</strong> to check now.</div>
+          <div class="card">
+            <h3>✏️ Paraphrase & Remove Plagiarism</h3>
+            
+            <div class="form-group">
+              <label for="removerInput">Text to Paraphrase</label>
+              <textarea id="removerInput" placeholder="Paste text to paraphrase..."></textarea>
+            </div>
+            
+            <div class="form-group">
+              <label for="intensitySlider">Paraphrasing Intensity</label>
+              <input id="intensitySlider" type="range" min="0.1" max="1" step="0.1" value="0.7">
+              <div class="intensity-display">
+                <span id="intensityLabel" style="font-weight: bold; color: var(--accent-1);">Medium (0.7)</span>
+                <span id="intensityDesc" style="font-size: 0.9rem; color: #666;">Balanced paraphrasing for natural results</span>
+              </div>
+            </div>
+            
+            <div class="btn-group">
+              <button id="paraphraseBtn" type="button" class="btn btn-primary">Paraphrase</button>
+              <button id="removerClearBtn" type="button" class="btn btn-secondary btn-small">Clear</button>
+            </div>
+          </div>
+          
+          <div id="removerResults"></div>
         </div>
+        
+        <aside>
+          <div class="card">
+            <h3>⚙️ Options</h3>
+            <div class="stats">
+              <div class="stat-item">
+                <span class="stat-label">Method:</span>
+                <span class="stat-value">Synonym + Restructure</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-label">Language:</span>
+                <span class="stat-value">English</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-label">Quality:</span>
+                <span class="stat-value">Professional</span>
+              </div>
+            </div>
+          </div>
+        </aside>
       </div>
-
-      <div>
-        <div style="font-weight:700;color:#0f172a;margin-bottom:.6rem">📥 Export Report</div>
-        <button id="downloadBtn" style="width:100%;padding:.8rem;border-radius:10px;border:0;font-weight:800;background:linear-gradient(135deg,#10b981,#059669);color:#fff;cursor:pointer" disabled>Download Report</button>
-        <p class="muted-note">Generate detailed plagiarism analysis report (TXT)</p>
-      </div>
-    </aside>
-  </main>
+    </div>
+  </div>
+  
+  <!-- Debug Panel -->
+  <div style="position: fixed; bottom: 10px; right: 10px; width: 400px; max-height: 300px; background: #1a1a1a; color: #0f0; border: 2px solid #0f0; border-radius: 4px; padding: 10px; font-family: monospace; font-size: 11px; overflow-y: auto; z-index: 10000; box-shadow: 0 0 20px rgba(0,255,0,0.3);">
+    <div style="margin-bottom: 5px; font-weight: bold; color: #00ff00;">📊 DEBUG PANEL</div>
+    <div id="debugPanel" style="height: 250px; overflow-y: auto; word-wrap: break-word; white-space: pre-wrap;"></div>
+  </div>
 
   <script>
-    // ---------- CONFIG ----------
-    const serverUrl = 'http://127.0.0.1:8000'; // change if your backend is elsewhere
-
-    // ---------- STATE ----------
-    // uploaded map: filename => { file: File, status: 'not-indexed'|'indexed'|'index-error', doc_id?, error? }
-    const uploaded = new Map();
-
-    // ---------- HELPERS ----------
-    function escapeHtml(s){ return String(s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])) }
-    function countWords(s){ if(!s) return 0; return s.trim().split(/\s+/).filter(Boolean).length }
-    function buildReport(title,text,results){
-      const ts = new Date().toLocaleString(); return ['════════════════════════════════════════════════',title,'════════════════════════════════════════════════','',`Generated: ${ts}`,`Document Length: ${countWords(text)} words`,'','ANALYSIS RESULTS:',results,'','DOCUMENT CONTENT:','────────────────────────────────────────',text,'────────────────────────────────────────','Report generated by TextGuard Pro'].join('\n')
+    // ========== BLOCK LIVE SERVER AUTO-RELOAD ==========
+    // Live Server injects WebSocket connection for auto-reload
+    // Block it IMMEDIATELY before it runs
+    if (window.WebSocket) {
+      const originalWebSocket = window.WebSocket;
+      window.WebSocket = function(...args) {
+        console.log('WebSocket attempt blocked:', args);
+        // Don't create WebSocket connection
+        throw new Error('WebSocket blocked');
+      };
     }
-    function downloadFile(content,filename){ const blob=new Blob([content],{type:'text/plain;charset=utf-8'}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download=filename; document.body.appendChild(a); a.click(); URL.revokeObjectURL(url); a.remove(); }
-
-    // ---------- RENDER file list (no auto-ops) ----------
-    function renderFileList(){
-      const container = document.getElementById('fileList'); container.innerHTML = '';
-      if (uploaded.size === 0) {
-        container.innerHTML = '<div style="color:#64748b">No files uploaded</div>'; return;
+    
+    // Also block XMLHttpRequest for polling
+    let xmlHttpCount = 0;
+    const originalXHR = window.XMLHttpRequest;
+    window.XMLHttpRequest = function() {
+      const xhr = new originalXHR();
+      const originalOpen = xhr.open;
+      xhr.open = function(...args) {
+        xmlHttpCount++;
+        if (xmlHttpCount < 10) {
+          console.log('XHR attempt #' + xmlHttpCount + ':', args);
+        }
+        return originalOpen.apply(xhr, args);
+      };
+      return xhr;
+    };
+    
+    // ========== GLOBAL REFRESH PREVENTION ==========
+    let navigationBlocked = false;
+    let lastDebugMessage = '';
+    
+    window.ANALYSIS_STATE = {
+      inProgress: false,
+      lastError: null,
+      debugLogs: []
+    };
+    
+    // Log all messages to a visible debug panel
+    function addDebugLog(message) {
+      const timestamp = new Date().toLocaleTimeString();
+      lastDebugMessage = message;
+      window.ANALYSIS_STATE.debugLogs.push(`[${timestamp}] ${message}`);
+      console.log(message);
+      
+      // Update debug panel if it exists
+      const debugPanel = document.getElementById('debugPanel');
+      if (debugPanel) {
+        debugPanel.innerHTML = window.ANALYSIS_STATE.debugLogs.slice(-30).join('<br>');
+        debugPanel.scrollTop = debugPanel.scrollHeight;
       }
-
-      uploaded.forEach((meta, name) => {
-        const item = document.createElement('div'); item.className = 'file-item';
-        const left = document.createElement('div'); left.className = 'left'; left.innerHTML = `📄 <strong>${escapeHtml(name)}</strong>`; item.appendChild(left);
-
-        const actions = document.createElement('div'); actions.className = 'actions';
-
-        // status
-        const statusEl = document.createElement('span'); statusEl.className = 'status-badge';
-        if (meta.status === 'indexed') statusEl.innerText = 'Indexed';
-        else if (meta.status === 'index-error') statusEl.innerHTML = 'Index Error';
-        else statusEl.innerText = 'Not indexed';
-        actions.appendChild(statusEl);
-
-        // Index button (explicit)
-        const indexBtn = document.createElement('button'); indexBtn.className = 'btn-index'; indexBtn.innerText = 'Index';
-        indexBtn.title = 'Upload this file to the local corpus (indexes for future checks)';
-        indexBtn.addEventListener('click', () => indexFile(name));
-        actions.appendChild(indexBtn);
-
-        // Analyze button (explicit)
-        const analyzeBtn = document.createElement('button'); analyzeBtn.className = 'btn-analyze'; analyzeBtn.innerText = 'Analyze';
-        analyzeBtn.title = 'Analyze this file now (does not require indexing)';
-        analyzeBtn.addEventListener('click', () => analyzeUploadedFile(name));
-        actions.appendChild(analyzeBtn);
-
-        // Remove (confirm)
-        const removeBtn = document.createElement('button'); removeBtn.className = 'btn-remove'; removeBtn.innerText = 'Remove';
-        removeBtn.addEventListener('click', () => {
-          const ok = confirm(`Remove "${name}" from the list? This will not delete any server-indexed copy.`); // explicit
-          if (ok) { uploaded.delete(name); renderFileList(); document.getElementById('downloadBtn').disabled = uploaded.size === 0; }
+    }
+    
+    // BLOCK ALL navigation
+    window.addEventListener('beforeunload', (e) => {
+      if (navigationBlocked) {
+        e.preventDefault();
+        e.returnValue = '';
+        addDebugLog('🔴 BLOCKED: beforeunload event');
+        return false;
+      }
+    });
+    
+    // Block link clicks
+    document.addEventListener('click', (e) => {
+      if (e.target.tagName === 'A' && !e.target.target && navigationBlocked) {
+        e.preventDefault();
+        e.stopPropagation();
+        addDebugLog('🔴 BLOCKED: link click to ' + e.target.href);
+        return false;
+      }
+    }, true);
+    
+    // Override location methods
+    const originalAssign = window.location.assign.bind(window.location);
+    const originalReplace = window.location.replace.bind(window.location);
+    const originalReload = window.location.reload.bind(window.location);
+    
+    window.location.assign = function(url) {
+      addDebugLog('🔴 BLOCKED: window.location.assign(' + url + ')');
+      console.trace('ASSIGN STACK');
+      if (!navigationBlocked) return originalAssign(url);
+    };
+    
+    window.location.replace = function(url) {
+      addDebugLog('🔴 BLOCKED: window.location.replace(' + url + ')');
+      console.trace('REPLACE STACK');
+      if (!navigationBlocked) return originalReplace(url);
+    };
+    
+    window.location.reload = function() {
+      addDebugLog('🔴 BLOCKED: window.location.reload()');
+      console.trace('RELOAD STACK');
+      if (!navigationBlocked) return originalReload();
+    };
+    
+    // Block form submissions
+    document.addEventListener('submit', (e) => {
+      addDebugLog('🔴 FORM SUBMIT detected on: ' + e.target.id);
+      e.preventDefault();
+      e.stopPropagation();
+      console.trace('FORM SUBMIT STACK');
+      return false;
+    }, true);
+    
+    const serverUrl = 'http://127.0.0.1:8000';
+    
+    // Tab switching
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById(btn.dataset.tab).classList.add('active');
+      });
+    });
+    
+    // ============ PLAGIARISM CHECKER ============
+    const textInput = document.getElementById('textInput');
+    const analyzeBtn = document.getElementById('analyzeBtn');
+    const clearBtn = document.getElementById('clearBtn');
+    const uploadBtn = document.getElementById('uploadBtn');
+    const fileInput = document.getElementById('fileInput');
+    const userIdEl = document.getElementById('userId');
+    const maxPhrasesEl = document.getElementById('maxPhrases');
+    const maxUrlsEl = document.getElementById('maxUrls');
+    const useSemanticEl = document.getElementById('useSemantic');
+    const matchesList = document.getElementById('matchesList');
+    const statsInfo = document.getElementById('statsInfo');
+    const resultsArea = document.getElementById('resultsArea');
+    
+    function escapeHtml(s) {
+      return String(s).replace(/[&<>"']/g, c => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;'
+      }[c]));
+    }
+    
+    function formatPercentage(num) {
+      if (num >= 60) return `<span style="color:#ef4444">${num}%</span>`;
+      if (num >= 30) return `<span style="color:#f59e0b">${num}%</span>`;
+      return `<span style="color:#10b981">${num}%</span>`;
+    }
+    
+    analyzeBtn.addEventListener('click', async (e) => {
+      addDebugLog('✅ STEP 1: Analyze button clicked');
+      e.preventDefault();
+      e.stopPropagation();
+      addDebugLog('✅ STEP 1.5: preventDefault & stopPropagation called');
+      
+      window.ANALYSIS_STATE.inProgress = true;
+      navigationBlocked = true;  // BLOCK ALL NAVIGATION
+      addDebugLog('🛑 NAVIGATION BLOCKED - TRAPPING REFRESH');
+      
+      const text = textInput.value.trim();
+      if (!text) {
+        alert('Please paste text first');
+        window.ANALYSIS_STATE.inProgress = false;
+        navigationBlocked = false;
+        return;
+      }
+      
+      // Save text to localStorage as backup
+      localStorage.setItem('lastAnalyzedText', textInput.value);
+      
+      analyzeBtn.disabled = true;
+      analyzeBtn.innerHTML = 'Analyzing<span class="loading"></span>';
+      resultsArea.innerHTML = '<div class="card" style="background: #dbeafe;"><strong>[ANALYSIS RUNNING...]</strong></div>';
+      matchesList.innerHTML = '';
+      statsInfo.innerHTML = '';
+      
+      const fd = new FormData();
+      fd.append('text', text);
+      fd.append('user_id', userIdEl.value || '');
+      fd.append('max_phrases', maxPhrasesEl.value);
+      fd.append('max_urls', maxUrlsEl.value);
+      fd.append('use_semantic', useSemanticEl.checked);
+      
+      try {
+        addDebugLog('✅ STEP 2: FormData prepared, sending request...');
+        addDebugLog('📡 URL: ' + `${serverUrl}/api/check-text`);
+        
+        const res = await fetch(`${serverUrl}/api/check-text`, { 
+          method: 'POST', 
+          body: fd
         });
-        actions.appendChild(removeBtn);
+        
+        addDebugLog('✅ STEP 3: Response received, status=' + res.status);
+        
+        let data;
+        try {
+          data = await res.json();
+          addDebugLog('✅ STEP 4: JSON parsed successfully');
+        } catch (jsonErr) {
+          addDebugLog('❌ STEP 4: JSON parsing failed: ' + jsonErr.message);
+          throw new Error(`Invalid JSON response: ${jsonErr.message}`);
+        }
+        
+        addDebugLog('📊 Response data: ok=' + data.ok);
+        
+        if (!res.ok || !data.ok) {
+          addDebugLog('❌ STEP 5: API error - ' + (data.error || 'Unknown error'));
+          resultsArea.innerHTML = `<div class="card alert alert-error">Error: ${data.error || 'Server error'}</div>`;
+          analyzeBtn.disabled = false;
+          analyzeBtn.innerHTML = 'Analyze Text';
+          window.ANALYSIS_STATE.inProgress = false;
+          navigationBlocked = false;
+          return;
+        }
+        
+        addDebugLog('✅ STEP 6: Displaying results...');
+        
+        // Display results
+        const plagScore = data.plagiarism_percentage || 0;
+        const isPlagi = data.is_plagiarized;
+        
+        let html = `<div class="card">
+          <h3>🎯 Analysis Results</h3>
+          <div class="stats">
+            <div class="stat-item">
+              <span class="stat-label">Plagiarism Score:</span>
+              <span class="stat-value">${formatPercentage(plagScore)}</span>
+            </div>
+            <div class="plagiarism-bar">
+              <div class="plagiarism-bar-fill" style="width:${Math.min(100, plagScore)}%">
+                ${Math.min(100, plagScore).toFixed(1)}%
+              </div>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label">Status:</span>
+              <span class="stat-value" style="color:${isPlagi ? '#ef4444' : '#10b981'}">
+                ${isPlagi ? 'PLAGIARIZED' : 'ORIGINAL'}
+              </span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label">Sources Examined:</span>
+              <span class="stat-value">${data.sources_examined || 0}</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label">Matches Found:</span>
+              <span class="stat-value">${data.matches?.length || 0}</span>
+            </div>
+          </div>
+        </div>`;
+        
+        resultsArea.innerHTML = html;
+        addDebugLog('✅ STEP 6.5: Results HTML set');
+        
+        // Display matches
+        addDebugLog('✅ STEP 7: Processing matches (count=' + (data.matches?.length || 0) + ')');
+        if (data.matches && data.matches.length) {
+          let matchesHtml = '';
+          for (const match of data.matches.slice(0, 5)) {
+            matchesHtml += `
+              <div class="match-item">
+                <a href="${escapeHtml(match.url)}" target="_blank" class="match-url">${escapeHtml(match.url)}</a>
+                <div class="match-score">
+                  Similarity: <strong>${match.plagiarism_percent}%</strong> | 
+                  Jaccard: ${match.jaccard_similarity} | 
+                  Semantic: ${match.semantic_similarity}
+                </div>
+              </div>
+            `;
+          }
+          matchesList.innerHTML = matchesHtml;
+          addDebugLog('✅ STEP 7.5: Matches displayed');
+        } else {
+          matchesList.innerHTML = '<div class="no-data">No matches found</div>';
+          addDebugLog('ℹ️ STEP 7: No matches to display');
+        }
+        
+        // Display stats
+        addDebugLog('✅ STEP 8: Displaying stats');
+        const stats = data.text_stats || {};
+        statsInfo.innerHTML = `
+          <div class="stats">
+            <div class="stat-item">
+              <span class="stat-label">Total Words:</span>
+              <span class="stat-value">${stats.total_words || 0}</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label">Total Characters:</span>
+              <span class="stat-value">${stats.total_chars || 0}</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label">Sentences:</span>
+              <span class="stat-value">${stats.total_sentences || 0}</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label">Unique Tokens:</span>
+              <span class="stat-value">${stats.unique_tokens || 0}</span>
+            </div>
+          </div>
+        `;
+        addDebugLog('🎉 STEP 9: ALL RESULTS DISPLAYED SUCCESSFULLY!');
+        addDebugLog('✅ Analysis is COMPLETE and results are showing!');
+        
+      } catch (err) {
+        addDebugLog('❌ ERROR CAUGHT: ' + err.message);
+        console.error('Full error:', err);
+        resultsArea.innerHTML = `<div class="card alert alert-error">Network error: ${err.message}</div>`;
+      } finally {
+        addDebugLog('✅ FINALLY: Analysis complete');
+        analyzeBtn.disabled = false;
+        analyzeBtn.innerHTML = 'Analyze Text';
+        window.ANALYSIS_STATE.inProgress = false;
+        navigationBlocked = false;  // UNBLOCK NAVIGATION after analysis
+        addDebugLog('✅ Button reset - navigation unblocked');
+      }
+    });
+    
+    clearBtn.addEventListener('click', () => {
+      textInput.value = '';
+      userIdEl.value = '';
+      resultsArea.innerHTML = '';
+      matchesList.innerHTML = '';
+      statsInfo.innerHTML = '';
+    });
+    
+    uploadBtn.addEventListener('click', () => fileInput.click());
+    
+    fileInput.addEventListener('change', async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      
+      analyzeBtn.disabled = true;
+      analyzeBtn.innerHTML = 'Uploading<span class="loading"></span>';
+      
+      const fd = new FormData();
+      fd.append('file', file);
+      fd.append('user_id', userIdEl.value || '');
+      
+      try {
+        const res = await fetch(`${serverUrl}/api/check-file`, { method: 'POST', body: fd });
+        const data = await res.json();
+        
+        if (!res.ok || !data.ok) {
+          resultsArea.innerHTML = `<div class="card alert alert-error">Error: ${data.error}</div>`;
+          return;
+        }
+        
+        // Display file results similar to text
+        const plagScore = data.plagiarism_percentage || 0;
+        resultsArea.innerHTML = `<div class="card">
+          <h3>📄 File Analysis Results</h3>
+          <div class="stat-item">
+            <span>File: <strong>${escapeHtml(file.name)}</strong></span>
+          </div>
+          <div class="plagiarism-bar">
+            <div class="plagiarism-bar-fill" style="width:${Math.min(100, plagScore)}%">
+              ${Math.min(100, plagScore).toFixed(1)}%
+            </div>
+          </div>
+        </div>`;
+        
+      } catch (err) {
+        resultsArea.innerHTML = `<div class="card alert alert-error">Error: ${err.message}</div>`;
+      } finally {
+        analyzeBtn.disabled = false;
+        analyzeBtn.innerHTML = 'Analyze Text';
+        fileInput.value = '';
+      }
+    });
+    
+    // ============ PLAGIARISM REMOVER ============
+    const removerInput = document.getElementById('removerInput');
+    const paraphraseBtn = document.getElementById('paraphraseBtn');
+    const removerClearBtn = document.getElementById('removerClearBtn');
+    const intensitySlider = document.getElementById('intensitySlider');
+    const intensityLabel = document.getElementById('intensityLabel');
+    const intensityDesc = document.getElementById('intensityDesc');
+    const removerResults = document.getElementById('removerResults');
+    
+    function updateIntensityLabel() {
+      const value = parseFloat(intensitySlider.value);
+      let label = '';
+      let desc = '';
+      
+      if (value <= 0.2) {
+        label = 'Light (0.1-0.2)';
+        desc = 'Minimal changes, preserves original flow';
+      } else if (value <= 0.4) {
+        label = 'Mild (0.3-0.4)';
+        desc = 'Subtle word replacements, mostly structure intact';
+      } else if (value <= 0.6) {
+        label = 'Moderate (0.5-0.6)';
+        desc = 'Noticeable paraphrasing with some restructuring';
+      } else if (value <= 0.8) {
+        label = 'Medium-Heavy (0.7-0.8)';
+        desc = 'Balanced paraphrasing for natural results';
+      } else {
+        label = 'Heavy (0.9-1.0)';
+        desc = 'Significant changes, distinct from original';
+      }
+      
+      intensityLabel.textContent = label;
+      intensityDesc.textContent = desc;
+    }
+    
+    intensitySlider.addEventListener('input', updateIntensityLabel);
+    updateIntensityLabel(); // Initialize
+    
+    paraphraseBtn.addEventListener('click', async () => {
+      const text = removerInput.value.trim();
+      if (!text) {
+        alert('Please paste text to paraphrase');
+        return;
+      }
+      
+      if (text.length < 50) {
+        alert('Please paste more text (at least 50 characters)');
+        return;
+      }
+      
+      paraphraseBtn.disabled = true;
+      paraphraseBtn.innerHTML = 'Paraphrasing<span class="loading"></span>';
+      removerResults.innerHTML = '';
+      
+      const fd = new FormData();
+      fd.append('text', text);
+      fd.append('intensity', intensitySlider.value);
+      
+      try {
+        const res = await fetch(`${serverUrl}/api/remove-plagiarism`, { method: 'POST', body: fd });
+        const data = await res.json();
+        
+        if (!data.ok) {
+          removerResults.innerHTML = `<div class="card alert alert-error">⚠️ Error: ${data.error}</div>`;
+          return;
+        }
+        
+        const original = data.original_text;
+        const paraphrased = data.paraphrased_text;
+        const changes = data.changes_applied || {};
+        
+        // Calculate improvement metrics
+        const origLength = original.split(/\s+/).length;
+        const paraLength = paraphrased.split(/\s+/).length;
+        const changeScore = changes.text_variation || 0;
+        
+        removerResults.innerHTML = `
+          <div class="card">
+            <h3>✅ Paraphrasing Complete</h3>
+            <div class="stats">
+              <div class="stat-item">
+                <span class="stat-label">Intensity Applied:</span>
+                <span class="stat-value">${(parseFloat(changes.intensity) * 100).toFixed(0)}%</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-label">Sentences Processed:</span>
+                <span class="stat-value">${changes.sentences_processed}</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-label">Text Variation:</span>
+                <span class="stat-value">${changeScore}%</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-label">Original Length:</span>
+                <span class="stat-value">${origLength} words</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="card">
+            <h3>📝 Side-by-Side Comparison</h3>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+              <div>
+                <h4 style="color:#0f172a; margin-bottom:0.5rem; padding-bottom: 0.5rem; border-bottom: 2px solid #e5e7eb;">📄 Original</h4>
+                <div class="text-preview" style="min-height: 200px; background: #f3f4f6;">${escapeHtml(original)}</div>
+              </div>
+              <div>
+                <h4 style="color:#0f172a; margin-bottom:0.5rem; padding-bottom: 0.5rem; border-bottom: 2px solid #10b981;">✨ Paraphrased</h4>
+                <div class="text-preview" style="min-height: 200px; background: #f0fdf4;">${escapeHtml(paraphrased)}</div>
+              </div>
+            </div>
+            <div style="margin-top: 1rem; display: flex; gap: 0.5rem;">
+              <button class="btn btn-primary btn-small" onclick="copyToClipboard('${escapeHtml(paraphrased).replace(/'/g, "\\'")}')">
+                📋 Copy Paraphrased Text
+              </button>
+              <button class="btn btn-secondary btn-small" onclick="copyToClipboard('${escapeHtml(original).replace(/'/g, "\\'")}')">
+                📄 Copy Original
+              </button>
+            </div>
+          </div>
+          
+          <div class="card" style="background: #eff6ff; color: #0c4a6e;">
+            <h4 style="margin-bottom: 0.5rem;">💡 Tips for Best Results</h4>
+            <ul style="margin-left: 1.5rem; line-height: 1.6;">
+              <li>Try different intensity levels to find the right balance</li>
+              <li>Light intensity (0.1-0.3) works best for preserving technical accuracy</li>
+              <li>Higher intensity (0.7-1.0) creates more distinct paraphrasing</li>
+              <li>Review the output carefully before submission</li>
+            </ul>
+          </div>
+        `;
 
-        item.appendChild(actions);
-        container.appendChild(item);
+        
+      } catch (err) {
+        removerResults.innerHTML = `<div class="card alert alert-error">Error: ${err.message}</div>`;
+      } finally {
+        paraphraseBtn.disabled = false;
+        paraphraseBtn.innerHTML = 'Paraphrase';
+      }
+    });
+    
+    removerClearBtn.addEventListener('click', () => {
+      removerInput.value = '';
+      removerResults.innerHTML = '';
+    });
+    
+    function copyToClipboard(text) {
+      navigator.clipboard.writeText(text.replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#39;/g, "'")).then(() => {
+        alert('Copied to clipboard!');
       });
     }
-
-    // ---------- UPLOAD local show only (NO server calls) ----------
-    function handleFileInputChange(e){
-      const files = Array.from(e.target.files || []); if (!files.length) return;
-      for (const f of files) { if (!uploaded.has(f.name)) uploaded.set(f.name, { file: f, status: 'not-indexed' }); }
-      renderFileList();
-      document.getElementById('downloadBtn').disabled = uploaded.size === 0;
-    }
-
-    // ---------- Index a file on demand (explicit) ----------
-    async function indexFile(filename){
-      const meta = uploaded.get(filename);
-      if (!meta) { alert('File not found'); return; }
-      const file = meta.file;
-      // update UI badge
-      uploaded.set(filename, { ...meta, status: 'indexing' }); renderFileList();
-      try {
-        const fd = new FormData(); fd.append('file', file, file.name);
-        const res = await fetch(`${serverUrl}/api/index-file`, { method: 'POST', body: fd });
-        const j = await res.json();
-        if (res.ok && j.ok) {
-          uploaded.set(filename, { ...meta, status: 'indexed', doc_id: j.doc_id });
-          alert(`Indexed ${filename} (doc_id: ${j.doc_id})`);
-        } else {
-          uploaded.set(filename, { ...meta, status: 'index-error', error: j.error || 'Index failed' });
-          alert(`Index failed for ${filename}: ${j.error || 'server error'}`);
-        }
-      } catch (err) {
-        uploaded.set(filename, { ...meta, status: 'index-error', error: String(err) });
-        alert(`Network error while indexing ${filename}. Is server running at ${serverUrl}?`);
-      }
-      renderFileList();
-    }
-
-    // ---------- Analyze uploaded file (explicit) ----------
-    async function analyzeUploadedFile(filename){
-      const meta = uploaded.get(filename);
-      if (!meta) { alert('File not found'); return; }
-      const file = meta.file;
-      const resultsCard = document.getElementById('resultsCard'); const resultsContent = document.getElementById('resultsContent');
-      resultsContent.innerHTML = `<div class="result-item">Analyzing file: ${escapeHtml(filename)} …</div>`; resultsCard.classList.add('show');
-
-      try {
-        const fd = new FormData(); fd.append('file', file, file.name); fd.append('top_k','10');
-        const res = await fetch(`${serverUrl}/api/check-file`, { method:'POST', body: fd });
-        const j = await res.json();
-        if (!res.ok || !j.ok) {
-          resultsContent.innerHTML = `<div class="result-item"><strong>Error:</strong> ${j.error || 'Server error'}</div>`; return;
-        }
-        const matches = j.matches || [];
-        if (matches.length === 0) {
-          resultsContent.innerHTML = `<div class="result-item"><strong>No similar documents found in local corpus.</strong></div>`;
-        } else {
-          let html = `<div class="result-item"><strong>Candidates examined:</strong> ${j.candidates_count || 0}</div>`;
-          matches.forEach(m => {
-            html += `<div class="result-item"><strong>${escapeHtml(m.filename || m.doc_id)}</strong><br/>Similarity: <span style="color:#3b82f6">${m.percent}%</span><br/>Words: ${m.words} ● Shingles: ${m.shingles}</div>`;
-          });
-          resultsContent.innerHTML = html;
-        }
-      } catch (err) {
-        console.error(err);
-        resultsContent.innerHTML = `<div class="result-item"><strong>Network error. Is server running at ${serverUrl} ?</strong></div>`;
-      }
-    }
-
-    // ---------- Analyze pasted text (existing) ----------
-    async function checkPlagiarism() {
-      const text = document.getElementById('textInput').value.trim();
-      const resultsCard = document.getElementById('resultsCard'); const resultsContent = document.getElementById('resultsContent');
-      if (!text) { alert('Please enter text to check'); document.getElementById('textInput').focus(); return; }
-      resultsContent.innerHTML = `<div class="result-item">Analyzing... (this may take a second)</div>`; resultsCard.classList.add('show');
-
-      try {
-        const fd = new FormData(); fd.append('text', text); fd.append('top_k','10');
-        const res = await fetch(`${serverUrl}/api/check-text`, { method:'POST', body: fd });
-        const j = await res.json();
-        if (!res.ok || !j.ok) { resultsContent.innerHTML = `<div class="result-item"><strong>Error:</strong> ${j.error || 'Server error'}</div>`; return; }
-        const matches = j.matches || [];
-        if (matches.length === 0) {
-          resultsContent.innerHTML = `<div class="result-item"><strong>No similar documents found in local corpus.</strong></div>`;
-        } else {
-          let html = `<div class="result-item"><strong>Candidates examined:</strong> ${j.candidates_count || 0}</div>`;
-          matches.forEach(m => {
-            html += `<div class="result-item"><strong>${escapeHtml(m.filename || m.doc_id)}</strong><br/>Similarity: <span style="color:#3b82f6">${m.percent}%</span><br/>Words: ${m.words} ● Shingles: ${m.shingles}</div>`;
-          });
-          resultsContent.innerHTML = html;
-        }
-      } catch (err) {
-        console.error(err);
-        resultsContent.innerHTML = `<div class="result-item"><strong>Network error. Is server running at ${serverUrl} ?</strong></div>`;
-      }
-    }
-
-    // ---------- UI wiring ----------
-    document.getElementById('fileInput').addEventListener('change', handleFileInputChange);
-    document.getElementById('analyzeBtn').addEventListener('click', checkPlagiarism);
-    document.getElementById('clearBtn').addEventListener('click', () => { document.getElementById('textInput').value=''; document.getElementById('resultsCard').classList.remove('show'); });
-    // initial render
-    renderFileList();
   </script>
 </body>
 </html>

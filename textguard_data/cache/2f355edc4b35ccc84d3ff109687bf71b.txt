@@ -1,0 +1,1 @@
+Inside Main int main(){ // declaring two objects here class_name object_name1, object_name2; } Outside Main, just After Class definition class class_name { //declare data members // declare member functions }object_name1, object_name2;
