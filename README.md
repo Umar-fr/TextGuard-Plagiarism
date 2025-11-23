@@ -309,7 +309,6 @@ MIT License - See project repository for details
 1. **Check Logs**: Server outputs detailed error messages
 2. **Database**: Check `textguard_data/plagiarism_db.sqlite3` integrity
 3. **Dependencies**: Verify all packages installed: `pip list`
-4. **Network**: Confirm internet for web crawling
 
 ## 🌟 What Makes TextGuard Special
 
